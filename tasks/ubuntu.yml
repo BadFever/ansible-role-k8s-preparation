@@ -1,0 +1,51 @@
+---
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: Create config file for br_netfilter module
+  file:
+    path: /etc/modules-load.d/k8s.config
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Write config file for br_netfilter module
+  lineinfile:
+    path: /etc/modules-load.d/k8s.config
+    line: br_netfilter
+
+- name: Load br_netfilter module
+  command: modprobe br_netfilter
+
+- name: Enable net.ipv4.ip_forward in sysctl
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+  become: true
+
+- name: Enable net.bridge.bridge-nf-call-ip6tables in sysctl
+  sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: "1"
+    state: present
+
+- name: Enable net.bridge.bridge-nf-call-iptables in sysctl
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: "1"
+    state: present
+
+- name: "Reload sysctl"
+  command: sysctl --system
