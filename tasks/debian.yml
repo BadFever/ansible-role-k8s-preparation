@@ -23,7 +23,7 @@
 
 - name: Load br_netfilter module
   modprobe:
-    name: modprobe br_netfilter
+    name: br_netfilter
     state: present
 
 - name: Configure sysctl
