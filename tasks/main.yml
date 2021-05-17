@@ -1,3 +1,6 @@
 ---
+- debug:
+    msg: "Test {{ sysctl_config }}"
+
 - include_tasks: debian.yml
   when: ansible_os_family == 'Debian'
