@@ -36,8 +36,4 @@
     value: "{{ item.value }}"
     state: present
   with_items: "{{ sysctl_params }}"
-  register: result_sysctl_config
-
-- name: Reload sysctl
-  command: sysctl --system
-  when: result_sysctl_config is changed
+  notify: Reload sysctl
