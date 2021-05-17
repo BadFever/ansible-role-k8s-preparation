@@ -13,17 +13,13 @@
   when: ansible_swaptotal_mb > 0
 
 - name: Create config file for br_netfilter module
-  file:
-    path: /etc/modules-load.d/k8s.config
-    state: file
+  copy:
+    content: "br_netfilter"
+    dest: /etc/modules-load.d/k8s.config
+    force: no
     owner: root
     group: root
     mode: 0644
-
-- name: Write config file for br_netfilter module
-  lineinfile:
-    path: /etc/modules-load.d/k8s.config
-    line: br_netfilter
 
 - name: Load br_netfilter module
   modprobe:
