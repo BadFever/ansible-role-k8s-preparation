@@ -31,5 +31,5 @@
     name: "{{ item.name }}"
     value: "{{ item.value }}"
     state: present
-  with_items: sysctl_params
+  with_dict: "{{ sysctl_params }}"
   notify: Reload sysctl
