@@ -1,6 +1,6 @@
-# ansible-role-bootstrap-k8s
+# ansible-role-k8s-preparation
 
-This ansible roles bootstraps systems for ansible configuration management.
+An Ansible Role prepares system requirements for k8s on Linux.
 
 ## Requirements
 
@@ -10,42 +10,18 @@ None.
 
 Available variables are listed below, along with default values (see defaults/main.yml):
 
-The ansible service user.
-
-```yaml
-bootstrap_ansible_user: ansible
+```bash
+sysctl_params:
+  - name: net.bridge.bridge-nf-call-ip6tables
+    value: "1"
+  - name: net.ipv4.ip_forward
+    value: "1"
+  - name: net.bridge.bridge-nf-call-iptables
+    value: "1"
 ```
 
-The ansible service user password:
-
-```yaml
-bootstrap_ansible_user_password: "ansible"
-```
-
-The ansible service user ssh public key.
-
-```yaml
-bootstrap_ansible_user_ssh_public_key: ""
-```
-
-Allow passwordless sudo for ansible service user.
-
-```yaml
-bootstrap_ansible_allow_password_less_sudo: true
-```
+Settings for sysctl.
 
 ## Dependencies
 
 None.
-
-## Example Playbook
-
-```YAML
-- hosts: all
-  role:
-    - ansible-role-bootstrap
-```
-
-## License
-
-MIT
